@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from 'firebase'
 
 firebase.initializeApp({
   apiKey: "AIzaSyAtYnAXGjXKsZDZoZJj58fy-gUzg5zdE44",
@@ -7,9 +7,9 @@ firebase.initializeApp({
   projectId: "notifying-test",
   storageBucket: "notifying-test.appspot.com",
   messagingSenderId: "1088941220729"
-});
+})
 
 const firestore = firebase.firestore()
 firestore.settings({timestampsInSnapshots: true})
 
-export default firestore;
+export default firestore

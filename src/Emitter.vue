@@ -35,9 +35,10 @@
 </template>
 
 <script>
-import firestore from './firestore';
-import moment from 'moment';
-import orderBy from 'lodash/orderBy';
+import firestore from './firestore'
+import moment from 'moment'
+import orderBy from 'lodash/orderBy'
+let unsubscribe = null
 
 export default {
   data () {
@@ -48,11 +49,11 @@ export default {
   },
   name: 'Emitter',
   mounted() {
-    firestore.collection('events')
+    unsubscribe = firestore.collection('events')
       .onSnapshot(snapshot => {
-        let items = this.fetchedEvents;
+        let items = this.fetchedEvents
         snapshot.docChanges().forEach(item => {
-          const { id } = item.doc;
+          const { id } = item.doc
           if (item.type === 'added') {
             items.push({ ...item.doc.data(), id })
           } else if (item.type === 'removed') {
@@ -60,7 +61,7 @@ export default {
           }
         })
         this.fetchedEvents = items
-      });
+      })
   },
   methods: {
     addEvent(event) {
@@ -75,8 +76,8 @@ export default {
         this.$Notice.open({
           title: doc.data().type,
           desc: doc.id
-        });
-      });
+        })
+      })
     },
     deleteEvent(eventId) {
       firestore.collection('events').doc(eventId).delete()
@@ -89,6 +90,9 @@ export default {
     items() {
       return orderBy(this.fetchedEvents, 'added', 'desc')
     }
+  },
+  beforeDestroy() {
+    unsubscribe && unsubscribe()
   }
 }
 </script>
